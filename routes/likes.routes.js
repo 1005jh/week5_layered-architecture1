@@ -10,6 +10,7 @@ const LikesController = require("../controllers/likes.controller");
 const likesController = new LikesController();
 
 router.put("/:postId/like", authMiddleware, likesController.putLike);
+router.get("/like", authMiddleware, likesController.getLike);
 
 module.exports = router;
 //좋아요 게시글 조회 API

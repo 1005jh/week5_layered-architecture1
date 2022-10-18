@@ -40,6 +40,18 @@ class LikesController {
       next(error);
     }
   };
+  getLike = async (req, res, next) => {
+    try {
+      const { userId } = res.locals.user;
+      if (!userId) {
+        throw new InvalidParamsError();
+      }
+      const getLike = await this.likesService.findAllLike({ userId });
+      res.status(200).send({ getLike });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 module.exports = LikesController;

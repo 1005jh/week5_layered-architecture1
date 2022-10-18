@@ -30,6 +30,14 @@ class LikesRepository {
     const destroyLike = await Like.destroy({ where: { userId, postId } });
     return destroyLike;
   };
+  findAllLike = async ({ userId }) => {
+    const findAllLike = await Like.findAll({ where: { userId } });
+    return findAllLike;
+  };
+  findOnePost = async ({ postId }) => {
+    const findOnePost = await Post.findOne({ where: postId });
+    return findOnePost;
+  };
 }
 
 module.exports = LikesRepository;
