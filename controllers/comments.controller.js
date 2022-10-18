@@ -38,14 +38,23 @@ class CommentsController {
 
   //댓글 수정
   updateComments = async (req, res, next) => {
+    const { commentId } = req.params;
+    const { comment } = req.body;
+    const { user } = res.locals;
 
+    await this.commentService.updateComments({commentId,comment,user});
 
+    res.status(201).json({ "message":"댓글을 수정하였습니다." })
   }
 
   //댓글 삭제
   deleteComments = async (req, res, next) => {
+    const { commentId } = req.params;
+    const { user } = res.locals;
 
+    await this.commentService.deleteComments({commentId, user});
 
+    res.status(201).json({ "message":"댓글을 삭제하였습니다." })
   }
 
 }

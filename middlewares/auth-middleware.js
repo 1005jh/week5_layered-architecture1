@@ -54,12 +54,6 @@ module.exports = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
-    if (!accessToken) {
-      throw new InvalidParamsError('다시 로그인 해주세요.');
-    }
-
-
-
 
     if (!accessToken || !refreshToken) {
       throw new InvalidParamsError('로그인 후 사용해주세요.');

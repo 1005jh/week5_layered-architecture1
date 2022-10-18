@@ -49,13 +49,11 @@ class PostService {
   //게시글 수정
   updatePost = async ({postId, title, content, user}) =>{
     const findPost = await this.postRepository.findOnePost(postId)
-    console.log(title,11111111111111)
-    console.log(content,222222222222222222)
-    console.log(postId)
+
     if(findPost.userId == user.userId){
         await this.postRepository.updatePost({postId, title, content});
         return ;
-    }
+    } 
   }
 
   //게시글 삭제

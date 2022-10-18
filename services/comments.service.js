@@ -28,5 +28,21 @@ class CommentService {
           });
     }
 
+    updateComments = async({commentId,comment,user}) => {
+      const findComment = await this.commentRepository.findOneComment(commentId)
+      
+      if(findComment.userId == user.userId){
+        await this.commentRepository.updateComment({commentId,comment})
+      }
+    }
+
+    deleteComments = async({commentId, user}) => {
+      const findComment = await this.commentRepository.findOneComment(commentId)
+
+      if(findComment.userId == user.userId){
+        await this.commentRepository.deleteComment(commentId)
+      }
+    }
+
 }
 module.exports = CommentService;
