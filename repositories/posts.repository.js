@@ -1,45 +1,48 @@
 // repositories/posts.repository.js
 
-const { Posts } = require('../models');
+const { Post } = require('../models');
 
 class PostRepository {
+
+  //게시글 전체조회
   findAllPost = async () => {
-    // ORM인 Sequelize에서 Posts 모델의 findAll 메소드를 사용해 데이터를 요청합니다.
-    const posts = await Posts.findAll();
+    const posts = await Post.findAll();
 
     return posts;
   }
 
+  //게시글 하나조회
   findOnePost = async (postId) =>{
-    const postOne = await Posts.findByPk(postId);
-
+    const postOne = await Post.findByPk(postId);
     return postOne;
   }
 
-  createPost = async (nickname, title, content) => {
-    // ORM인 Sequelize에서 Posts 모델의 create 메소드를 사용해 데이터를 요청합니다.
-    console.log(nickname,password,title,content)
-    const createPostData = await Posts.create({ nickname, title, content });
-
+  //게시글 생성
+  createPost = async ({ title, content, username,  userId }) => {
+    const createPostData = await Post.create({
+      userId: userId,
+      title: title,
+      username: username,
+      content:content,
+      likes: 0
+  });
     return createPostData;
   }
   
+  //게시글 업데이트
   updatePost = async (postId, title, content) => {
-    const updatePostData = await Posts.update(
-      { title, content },
-      { where: { postId, password } }
-    );
-    return updatePostData;
+    await Post.update({title:title, content:content,}, {where:{postId:postId}})
+
+    return ;
   };
 
-
+  //게시글 삭제
   deletePost = async (postId) => {
-    const updatePostData = await Posts.destroy({ where: { postId } });
+    await Post.destroy({where:{postId:postId}});
 
-    return updatePostData;
+    return ;
   };
 }
-
 
 
 

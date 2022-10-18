@@ -17,6 +17,10 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
       },
+      refreshToken: {
+        type: Sequelize.STRING,
+        defaultValue: '',
+      },
       createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn("NOW"),
