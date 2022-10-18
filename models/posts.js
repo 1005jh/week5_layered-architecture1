@@ -53,6 +53,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Post",
     }
   );
-  
   return Post;
 };

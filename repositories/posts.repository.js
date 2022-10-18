@@ -1,46 +1,49 @@
 // repositories/posts.repository.js
 
-const { Posts } = require('../models');
+const { Post } = require('../models');
 
 class PostRepository {
 
   //게시글 전체조회
   findAllPost = async () => {
-    const posts = await Posts.findAll();
+    const posts = await Post.findAll();
 
     return posts;
   }
 
   //게시글 하나조회
   findOnePost = async (postId) =>{
-    const postOne = await Posts.findByPk(postId);
+    const postOne = await Post.findByPk(postId);
     return postOne;
   }
 
   //게시글 생성
-  createPost = async (nickname, userId, title, content) => {
+  createPost = async ({ title, content, nickname,  userId }) => {
     console.log(nickname,password,title,content)
-    const createPostData = await Posts.create({ nickname, userId, title, content});
+    const createPostData = await Post.create({
+      userId: userId,
+      title: title,
+      username: nickname,
+      content:content,
+      likes: 0
+  });
     return createPostData;
   }
   
   //게시글 업데이트
   updatePost = async (postId, title, content) => {
-    const updatePostData = await Posts.update(
-      { title, content },
-      { where: { postId, password } }
-    );
-    return updatePostData;
+    await Post.update({title:title, content:content,}, {where:{postId:postId}})
+
+    return ;
   };
 
   //게시글 삭제
   deletePost = async (postId) => {
-    const deletePostData = await Posts.destroy({ where: { postId } });
+    await Post.destroy({where:{postId:postId}});
 
-    return deletePostData;
+    return ;
   };
 }
-
 
 
 
