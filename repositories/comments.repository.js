@@ -1,38 +1,42 @@
 const { Comment } = require('../models');
 
 class CommentRepository {
-
   //postId기준으로 댓글 가져오기
     findComments = async (postId) => {
       const  comments = await Comment.findAll({where:{postId: postId}})
       return comments;
     }
-  
+
+    //댓글 아이디로 져오기
+    findOneComment = async (commentId) => {
+      const comments = await Comment.findByPk(commentId)
+      return comments;
+    }
+
   //댓글 생성
-    createComment = async (nickname,comment,userId,postId) => {
-      console.log(nickname,password,title,content)
+    createComment = async ({comment,postId,userId, username}) => {
+
       const createCommentData = await Comment.create({
         content: comment,
         postId: postId,
         userId: userId,
-        username: nickname
+        username: username
     });
       return createCommentData;
     }
 
   //댓글 수정
-    updateComment = async (comment,commentId) => {
+    updateComment = async ({comment,commentId}) => {
       console.log(comment,commentId)
-      const updateCommentData = await Comment.update({content: comment}, {where:{commentId:commentId}});
-      return updateCommentData;
+      await Comment.update({content: comment}, {where:{commentId:commentId}});
     }
 
   //댓글 삭제
     deleteComment = async (commentId) => {
       console.log(commentId)
-      const deleteCommentData = await Comment.destroy({where:{commentId:commentId}});
-      return deleteCommentData;
+      await Comment.destroy({where:{commentId:commentId}});
     }
   }
-  
+
+
   module.exports = CommentRepository;

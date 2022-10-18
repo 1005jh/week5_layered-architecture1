@@ -4,10 +4,10 @@ const authMiddleware = require("../middlewares/auth-middleware");
 const CommentsController = require('../controllers/comments.controller');
 const commentsController = new CommentsController();
 
-router.post("/:postid",authMiddleware,commentsController.createComments);      //댓글생성 
-router.get("/:postid",commentsController.getComments);                         //댓글조회 
-router.put("/:commentid",authMiddleware,commentsController.updateComments);    //댓글수정 
-router.delete("/:commentid",authMiddleware,commentsController.deleteComments); //댓글삭제.
+router.post("/:postId",authMiddleware,commentsController.createComments);      //댓글생성 
+router.get("/:postId",commentsController.getComments);                         //댓글조회 
+router.put("/:commentId",authMiddleware,commentsController.updateComments);    //댓글수정 
+router.delete("/:commentId",authMiddleware,commentsController.deleteComments); //댓글삭제.
 
 module.exports = router;
 

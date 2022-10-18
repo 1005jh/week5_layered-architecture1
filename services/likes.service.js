@@ -33,6 +33,26 @@ class LikesService {
     }
     console.log("9", postId);
   };
+  findAllLike = async ({ userId }) => {
+    const findAllLike = await this.likesRepository.findAllLike({ userId });
+    const findPostId = findAllLike.map((row) => row.postId);
+    let data = [];
+    for (const item of findPostId) {
+      const post = await this.likesRepository.findOnePost({ postId: item });
+      const result = {
+        postId: post.postId,
+        userId: post.userId,
+        nickname: post.username,
+        title: post.title,
+        content: post.content,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+        likes: post.likes,
+      };
+      data.push(result);
+    }
+    data.sort((a, b) => b.likes - a.likes);
+    return data;
+  };
 }
-
 module.exports = LikesService;

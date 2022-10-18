@@ -30,7 +30,11 @@ class PostRepository {
   }
   
   //게시글 업데이트
-  updatePost = async (postId, title, content) => {
+  updatePost = async ({postId, title, content}) => {
+    console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+    console.log(postId)
+    console.log(title)
+    console.log(content)
     await Post.update({title:title, content:content,}, {where:{postId:postId}})
 
     return ;

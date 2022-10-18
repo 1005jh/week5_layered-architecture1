@@ -12,7 +12,6 @@ class PostService {
     const allPost = await this.postRepository.findAllPost();
 
     // 호출한 Post들을 가장 최신 게시글 부터 정렬
-    console.log(allPost)
     allPost.sort((a, b) => {
       return b.createdAt - a.createdAt;
     })
@@ -49,18 +48,19 @@ class PostService {
 
   //게시글 수정
   updatePost = async ({postId, title, content, user}) =>{
-    const findPost = await this.PostRepository.findOne(postId)
+    const findPost = await this.postRepository.findOnePost(postId)
+
     if(findPost.userId == user.userId){
-        await this.PostRepository.updatePost({postId, title, content});
+        await this.postRepository.updatePost({postId, title, content});
         return ;
-    }
+    } 
   }
 
   //게시글 삭제
   deletePost = async ({postId,user}) => {
-    const findPost = await this.PostRepository.findOne(postId)
+    const findPost = await this.postRepository.findOnePost(postId)
     if(findPost.userId == user.userId){
-      await this.PostRepository.deletePost(postId);
+      await this.postRepository.deletePost(postId);
       return ;
       }
   }
