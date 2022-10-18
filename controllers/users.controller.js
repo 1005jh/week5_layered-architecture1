@@ -11,13 +11,14 @@ class UsersController {
     userSignup = async (req, res, next) => {
         try {
           const result = joi.userSchema.validate(req.body);
+          
     
           if (result.error) {
             throw new InvalidParamsError('형식에 맞게 모두 입력해주세요');
           }
           const { username, password, confirm } = result.value;
-    
-          const createUser = await this.UsersService.createUser(
+          console.log(username, password, confirm)
+          const createUser = await this.usersService.createUser(
             username,
             password,
             confirm
@@ -34,9 +35,10 @@ class UsersController {
         try {
           const { username, password } = req.body;
     
-          const user = await this.UsersService.loginUser(username, password);
-            console.log(user)
-
+          const user = await this.usersService.loginUser(username, password);
+          
+          res.cookie('accessToken', user[1]); // Access Token을 Cookie에 전달한다.
+          res.cookie('refreshToken', user[2]);
           res.status(200).json({
             username: user[0].username,
             userId: user[0].userId,
@@ -54,7 +56,7 @@ class UsersController {
           const { userId, username } = res.locals.user;
           const { accessToken  } = res.locals;
     
-          const existUser = await this.UsersService.checkUser(userId);
+          const existUser = await this.usersService.checkUser(userId);
             
           if (existUser.refreshToken === refreshToken){
             res.status(200).json({

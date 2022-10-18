@@ -39,22 +39,12 @@ class PostService {
   }
 
   //게시글 생성
-  createPost = async ({title, content, user}) => {
-    const nickname = user.username;
-    const userId = user.userId;
+  createPost = async ({title, content, userId, username}) => {
+  
 
-    const createPostData = await this.postRepository.createPost({ title, content, nickname,  userId });
+    const createPostData = await this.postRepository.createPost({ title, content, username,  userId });
 
-    return {
-      postId: post.postId,
-      userId: post.userId,
-      nickname: post.nickname,
-      title: post.title,
-      content: post.content,
-      createdAt: post.createdAt,
-      updatedAt: post.updatedAt,
-      likes: post.likes
-    };
+    return createPostData;
   }
 
   //게시글 수정
