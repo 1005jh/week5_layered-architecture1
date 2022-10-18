@@ -1,6 +1,17 @@
 const { Post } = require("../models");
 const { Like } = require("../models");
+const express = require("express");
+const router = express.Router();
 
+const authMiddleware = require("../middlewares/auth-middleware");
+
+const LikesController = require("../controllers/likes.controller");
+
+const likesController = new LikesController();
+
+router.put("/:postId/like", authMiddleware, likesController.putLike);
+
+module.exports = router;
 //좋아요 게시글 조회 API
 // router.get("/posts/like",authMiddleware,async(req,res)=>{
 //     try{
@@ -26,7 +37,6 @@ const { Like } = require("../models");
 //     res.status(200).json({data})
 //     }catch{res.status(400).json("400Error")}
 // });
-
 // //종아요 수정API
 // router.put("/posts/:postId/like",authMiddleware,async(req,res)=>{
 //     try{

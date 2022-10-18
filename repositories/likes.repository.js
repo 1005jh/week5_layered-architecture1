@@ -1,30 +1,32 @@
 const { Like, Post } = require("../models");
 
-class LikeRepository {
-  findOneLike = async (userId, postId) => {
+class LikesRepository {
+  findOneLike = async ({ userId, postId }) => {
+    console.log("3");
     const findOneLike = await Like.findOne({ where: { userId, postId } });
+    console.log("4");
     return findOneLike;
   };
-  upLikePost = async (postId) => {
+  upLikePost = async ({ postId }) => {
     const updateLikePost = await Post.update(
       { likes: 1 },
       { where: { postId } }
     );
     return updateLikePost;
   };
-  downLikePost = async (postId) => {
+  downLikePost = async ({ postId }) => {
     const updateLikePost = await Post.update(
       { likes: -1 },
       { where: { postId } }
     );
     return updateLikePost;
   };
-  createLike = async (userId, postId) => {
+  createLike = async ({ userId, postId }) => {
     const createLike = await Like.create({ userId, postId });
 
     return createLike;
   };
-  destroyLike = async (userId, postId) => {
+  destroyLike = async ({ userId, postId }) => {
     const destroyLike = await Like.destroy({ where: { userId, postId } });
     return destroyLike;
   };
