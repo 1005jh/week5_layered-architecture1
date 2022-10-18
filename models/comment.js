@@ -9,6 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.User, {
+        foreignKey: 'userId',
+        targetKey: 'userId',
+      });
+      this.belongsTo(models.Post, {
+        foreignKey: 'postId',
+        targetKey: 'postId',
+      });
     }
   }
   Comment.init(
@@ -39,17 +47,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Comment",
     }
   );
-  Comment.associate = function (models) {
-    models.Comments.hasMany(models.User, {
-      foreignKey: "userId",
-      onDelete: "cascade",
-    });
-  };
-  Comment.associate = function (models) {
-    models.Comments.hasMany(models.Post, {
-      foreignKey: "postId",
-      onDelete: "cascade",
-    });
-  };
+  
   return Comment;
 };
