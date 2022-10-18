@@ -39,17 +39,17 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Comment",
     }
   );
-  Comment.associate = function (models) {
-    models.Comments.hasMany(models.User, {
-      foreignKey: "userId",
-      onDelete: "cascade",
-    });
-  };
-  Comment.associate = function (models) {
-    models.Comments.hasMany(models.Post, {
-      foreignKey: "postId",
-      onDelete: "cascade",
-    });
-  };
+  // Comment.associate = function (models) {
+  //   models.Comments.hasMany(models.User, {
+  //     foreignKey: "userId",
+  //     onDelete: "cascade",
+  //   });
+  // };
+  // Comment.associate = function (models) {
+  //   models.Comments.hasMany(models.Post, {
+  //     foreignKey: "postId",
+  //     onDelete: "cascade",
+  //   });
+  // };
   return Comment;
 };

@@ -31,17 +31,17 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Like",
     }
   );
-  Like.associate = function (models) {
-    models.Likes.hasMany(models.User, {
-      foreignKey: "userId",
-      onDelete: "cascade",
-    });
-  };
-  Like.associate = function (models) {
-    models.Likes.hasMany(models.Post, {
-      foreignKey: "postId",
-      onDelete: "cascade",
-    });
-  };
+  // Like.associate = function (models) {
+  //   models.Likes.hasMany(models.User, {
+  //     foreignKey: "userId",
+  //     onDelete: "cascade",
+  //   });
+  // };
+  // Like.associate = function (models) {
+  //   models.Likes.hasMany(models.Post, {
+  //     foreignKey: "postId",
+  //     onDelete: "cascade",
+  //   });
+  // };
   return Like;
 };

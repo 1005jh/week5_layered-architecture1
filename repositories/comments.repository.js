@@ -33,7 +33,6 @@ class CommentRepository {
       const deleteCommentData = await Comment.destroy({where:{commentId:commentId}});
       return deleteCommentData;
     }
-
   }
   
   module.exports = CommentRepository;
