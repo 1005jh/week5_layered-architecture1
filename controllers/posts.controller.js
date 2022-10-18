@@ -9,9 +9,11 @@ class PostsController {
 
   //게시물 전체 조회
   getPosts = async (req, res, next) => {
+    try{
     const posts = await this.postService.findAllPost();
   
     res.status(200).json({ data: posts })
+    } catch{}
   }
 
   //게시물 상세 조회
