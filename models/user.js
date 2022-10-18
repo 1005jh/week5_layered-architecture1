@@ -13,6 +13,18 @@ module.exports = (sequelize, DataTypes) => {
       //   as: "Posts",
       //   foreignKey:"userId",
       // });
+      this.hasMany(models.Comment, {
+        foreignKey: 'userId',
+        sourceKey: 'userId',
+      });
+      this.hasMany(models.Post, {
+        foreignKey: 'userId',
+        sourceKey: 'userId',
+      });
+      this.hasMany(models.Like, {
+        foreignKey: 'likeId',
+        sourceKey: 'likeId',
+      });
     }
   }
   User.init(
@@ -37,6 +49,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       updatedAt: {
         type: DataTypes.DATE,
+      },
+      refreshToken: {
+        type: DataTypes.STRING
       },
     },
     {

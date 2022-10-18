@@ -9,7 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // this.belongsTo(models.Users,{foreignKey:"userId"});
+      //this.belongsTo(/models,{foreignKey:"userId"});
+      this.belongsTo(models.User, {
+        foreignKey: 'userId',
+        targetKey: 'userId',
+      });
+      this.hasMany(models.Comment, {
+        foreignKey: 'commentId',
+        sourceKey: 'commentId',
+      });
     }
   }
   Post.init(
@@ -45,11 +53,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Post",
     }
   );
-  // Post.associate = function (models) {
-  //   models.Posts.hasMany(models.User, {
-  //     foreignKey: "userId",
-  //     onDelete: "cascade",
-  //   });
-  // };
   return Post;
 };
