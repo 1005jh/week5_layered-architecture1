@@ -18,12 +18,11 @@ class PostRepository {
   }
 
   //게시글 생성
-  createPost = async ({ title, content, nickname,  userId }) => {
-    console.log(nickname,password,title,content)
+  createPost = async ({ title, content, username,  userId }) => {
     const createPostData = await Post.create({
       userId: userId,
       title: title,
-      username: nickname,
+      username: username,
       content:content,
       likes: 0
   });

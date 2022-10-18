@@ -1,6 +1,6 @@
 const { User } = require('../models');
 
-class UserRepository {
+class UsersRepository {
 
 
   findOneUser = async (userId) => {
@@ -30,4 +30,4 @@ class UserRepository {
   
   }
   
-  module.exports = UserRepository;
+  module.exports = UsersRepository;

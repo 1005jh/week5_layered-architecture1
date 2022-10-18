@@ -2,6 +2,7 @@
 const PostService = require('../services/posts.service');
 
 
+
 class PostsController {
   postService = new PostService(); 
 
@@ -21,10 +22,12 @@ class PostsController {
 
 //게시물 생성
   createPost = async (req, res, next) => {
-    const { user } = res.locals;
+    const { userId, username } = res.locals.user
+
+    console.log(userId, username)
     const { title, content } = req.body;
-    console.log(nickname,password,title,content)
-    const createPostData = await this.postService.createPost(title, content, user);
+    
+    const createPostData = await this.postService.createPost({title, content, userId, username});
 
     res.status(201).json({ data: createPostData });
   }

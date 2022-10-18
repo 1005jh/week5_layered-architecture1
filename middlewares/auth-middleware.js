@@ -51,29 +51,17 @@ const { InvalidParamsError } = require('../exceptions/index.exception');
 //};
 module.exports = async (req, res, next) => {
   try {
-    const accessToken = req.headers.accesstoken;
-    const refreshToken = req.headers.refreshtoken;
+    const accessToken = req.cookies.accessToken;
+    const refreshToken = req.cookies.refreshToken;
 
     if (!accessToken) {
       throw new InvalidParamsError('다시 로그인 해주세요.');
     }
-    const accessAuthType = accessToken.split(' ')[0];
-    const accessAuthToken = accessToken.split(' ')[1];
-    const refreshAuthType = refreshToken.split(' ')[0];
-    const refreshAuthToken = refreshToken.split(' ')[1];
 
-    if (accessAuthType !== 'Bearer' || refreshAuthType !== 'Bearer') {
-      throw new InvalidParamsError('다시 로그인 해주세요.');
-    }
 
-    if (
-      accessAuthToken === 'null' ||
-      accessAuthToken === 'undefined' ||
-      !accessAuthToken ||
-      refreshAuthToken === 'null' ||
-      refreshAuthToken === 'undefined' ||
-      !refreshAuthToken
-    ) {
+
+
+    if (!accessToken || !refreshToken) {
       throw new InvalidParamsError('로그인 후 사용해주세요.');
     }
 
@@ -81,12 +69,12 @@ module.exports = async (req, res, next) => {
     let refreshVerified = null;
 
     try {
-      accessVerified = jwt.verify(accessAuthToken, SECRET_KEY);
+      accessVerified = jwt.verify(accessToken, process.env.SECRET_KEY);
     } catch (error) {
       accessVerified = null;
     }
     try {
-      refreshVerified = jwt.verify(refreshAuthToken, SECRET_KEY);
+      refreshVerified = jwt.verify(refreshToken, process.env.SECRET_KEY);
     } catch (error) {
       refreshVerified = null;
     }
@@ -100,7 +88,7 @@ module.exports = async (req, res, next) => {
       // 2.access토큰은 만료되었지만 refresh토큰이 존재한다면 accessToken 발급
       if (!accessVerified && refreshVerified) {
         const existUser = await User.findOne({
-          where: { refreshToken: refreshAuthToken },
+          where: { refreshToken: refreshToken },
         });
 
         if (!existUser) {
@@ -110,14 +98,15 @@ module.exports = async (req, res, next) => {
         // accessToken 발급
         const userId = existUser.userId; //옵셔널 체이닝
 
-        const newAccessToken = jwt.sign({ userId }, SECRET_KEY, {
+        const newAccessToken = jwt.sign({ userId }, process.env.SECRET_KEY, {
           expiresIn: '1d',
         });
         console.log(newAccessToken, 'newAccessToken 확인');
+        res.cookies('accesToken', newAccessToken)
 
         return res.status(201).json({
           accessToken: newAccessToken,
-          refreshToken: refreshAuthToken,
+          refreshToken: refreshToken,
           msg: 'acceess 토큰이 재발급 되었습니다.',
         });
       }
@@ -131,7 +120,7 @@ module.exports = async (req, res, next) => {
           throw new InvalidParamsError(401, '로그인 기한이 만료되었습니다.');
         }
         // refreshToken 발급
-        const newRefreshToken = jwt.sign({ userId }, SECRET_KEY, {
+        const newRefreshToken = jwt.sign({ userId }, process.env.SECRET_KEY, {
           expiresIn: '21d',
         });
         console.log(newRefreshToken, 'newRefreshToken 확인');
@@ -140,9 +129,10 @@ module.exports = async (req, res, next) => {
           { refreshToken: newRefreshToken },
           { where: { userId } }
         );
+        res.cookies('refreshToken', newRefreshToken);
 
         return res.status(201).json({
-          accessToken: accessAuthToken,
+          accessToken: accessToken,
           refreshToken: newRefreshToken,
           msg: 'refresh 토큰이 재발급 되었습니다.',
         });
@@ -154,8 +144,8 @@ module.exports = async (req, res, next) => {
           where: { userId },
           attributes: ['userId', 'username'],
         }).then((user) => {
+          
           res.locals.user = user;
-          res.locals.accessToken = accessAuthToken;
           next();
         });
       }
