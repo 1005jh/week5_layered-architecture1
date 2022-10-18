@@ -3,7 +3,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Likes", {
-      id: {
+      likeId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -18,9 +18,7 @@ module.exports = {
         },
         onDelete: "cascade",
       },
-      username: {
-        type: Sequelize.STRING,
-      },
+
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,

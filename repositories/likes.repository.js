@@ -1,28 +1,35 @@
-const { Like } = require('../models');
+const { Like, Post } = require("../models");
 
-class LikeRepository {
-    findAllPost = async () => {
-      // ORM인 Sequelize에서 Posts 모델의 findAll 메소드를 사용해 데이터를 요청합니다.
-      const posts = await Posts.findAll();
-  
-      return posts;
-    }
-  
-    findOnePost = async (postId) =>{
-      const postOne = await Posts.findByPk(postId);
-  
-      return postOne;
-    }
-  
-    createPost = async (nickname, password, title, content) => {
-      // ORM인 Sequelize에서 Posts 모델의 create 메소드를 사용해 데이터를 요청합니다.
-      console.log(nickname,password,title,content)
-      const createPostData = await Posts.create({ nickname, password, title, content });
-  
-      return createPostData;
-    }
-    
-  
-  }
-  
-  module.exports = LikeRepository;
+class LikesRepository {
+  findOneLike = async ({ userId, postId }) => {
+    console.log("3");
+    const findOneLike = await Like.findOne({ where: { userId, postId } });
+    console.log("4");
+    return findOneLike;
+  };
+  upLikePost = async ({ postId }) => {
+    const updateLikePost = await Post.update(
+      { likes: 1 },
+      { where: { postId } }
+    );
+    return updateLikePost;
+  };
+  downLikePost = async ({ postId }) => {
+    const updateLikePost = await Post.update(
+      { likes: -1 },
+      { where: { postId } }
+    );
+    return updateLikePost;
+  };
+  createLike = async ({ userId, postId }) => {
+    const createLike = await Like.create({ userId, postId });
+
+    return createLike;
+  };
+  destroyLike = async ({ userId, postId }) => {
+    const destroyLike = await Like.destroy({ where: { userId, postId } });
+    return destroyLike;
+  };
+}
+
+module.exports = LikesRepository;

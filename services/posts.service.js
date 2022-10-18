@@ -1,56 +1,70 @@
 // services/posts.service.js
 
 const PostRepository = require('../repositories/posts.repository');
+const { post } = require('../routes');
 
 class PostService {
   postRepository = new PostRepository();
+
+  //게시글 전체 조회
   findAllPost = async () => {
-    // 저장소(Repository)에게 데이터를 요청합니다.
+
     const allPost = await this.postRepository.findAllPost();
 
-    // 호출한 Post들을 가장 최신 게시글 부터 정렬합니다.
+    // 호출한 Post들을 가장 최신 게시글 부터 정렬
     console.log(allPost)
     allPost.sort((a, b) => {
       return b.createdAt - a.createdAt;
     })
 
-    // 비즈니스 로직을 수행한 후 사용자에게 보여줄 데이터를 가공합니다.
+
     return allPost.map(post => {
       return {
         postId: post.postId,
+        userId: post.userId,
         nickname: post.nickname,
         title: post.title,
         createdAt: post.createdAt,
-        updatedAt: post.updatedAt
+        updatedAt: post.updatedAt,
+        likes: post.likes
       }
     });
   }
 
-  createPost = async (nickname, password, title, content) => {
-    // 저장소(Repository)에게 데이터를 요청합니다.
-    console.log(nickname,password,title,content)
-    const createPostData = await this.postRepository.createPost(nickname, password, title, content);
+  // 게시글  상세 조회
+  findOnePost = async (postId) => {
+    const postOne = await this.postRepository.findOnePost(postId);
 
-    // 비즈니스 로직을 수행한 후 사용자에게 보여줄 데이터를 가공합니다.
-    return {
-      postId: createPostData.null,
-      nickname: createPostData.nickname,
-      title: createPostData.title,
-      content: createPostData.content,
-      createdAt: createPostData.createdAt,
-      updatedAt: createPostData.updatedAt,
-    };
+    return postOne;
   }
 
-  putPost = async (password, title, content) =>{
-    const { postId } = req.params;
+  //게시글 생성
+  createPost = async ({title, content, userId, username}) => {
+  
+
+    const createPostData = await this.postRepository.createPost({ title, content, username,  userId });
+
+    return createPostData;
+  }
+
+  //게시글 수정
+  updatePost = async ({postId, title, content, user}) =>{
     const findPost = await this.PostRepository.findOne(postId)
-    if(findPost.password == password){
-        const putPostData = await this.PostRepository.putPost(title, content);
+    if(findPost.userId == user.userId){
+        await this.PostRepository.updatePost({postId, title, content});
+        return ;
     }
-    console.log(password,title,content)
-
   }
+
+  //게시글 삭제
+  deletePost = async ({postId,user}) => {
+    const findPost = await this.PostRepository.findOne(postId)
+    if(findPost.userId == user.userId){
+      await this.PostRepository.deletePost(postId);
+      return ;
+      }
+  }
+
 }
 
 module.exports = PostService;
