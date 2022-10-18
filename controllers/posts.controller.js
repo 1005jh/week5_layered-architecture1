@@ -3,6 +3,7 @@ const PostService = require('../services/posts.service');
 
 
 
+
 class PostsController {
   postService = new PostService(); 
 
@@ -15,7 +16,12 @@ class PostsController {
 
   //게시물 상세 조회
   getPostById = async(req,res,next)=> {
-    const posts = await this.postService.findOnePost();
+    const { postId } = req.params;
+    const posts = await this.postService.findOnePost(postId);
+    if(!posts) {
+      
+      return res.status(401).json({"message":"존재하지 않는 게시글 입니다."});
+    }
 
     res.status(200).json({ data: posts })
   }
@@ -36,8 +42,8 @@ class PostsController {
   updatePost = async (req,res, next) => {
     const { user } = res.locals;
     const { postId } = req.params;
-    const { title, content } =req.body;
-    await this.postService.updatePost(postId, title, content, user);
+    const { title, content } = req.body;
+    await this.postService.updatePost({postId, title, content, user});
 
     res.status(201).json({ "message":"게시글을 수정하였습니다." })
   }
@@ -46,7 +52,7 @@ class PostsController {
   deletePost = async (req,res,next) => {
     const { user } = res.locals;
     const { postId } = req.params;
-    await this.postService.deletePost(postId,user);
+    await this.postService.deletePost({postId,user});
 
     res.status(201).json({"message":"게시글을 삭제하였습니다."})
   }

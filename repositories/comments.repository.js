@@ -1,21 +1,20 @@
 const { Comment } = require('../models');
 
 class CommentRepository {
-
   //postId기준으로 댓글 가져오기
     findComments = async (postId) => {
       const  comments = await Comment.findAll({where:{postId: postId}})
       return comments;
     }
-  
+
   //댓글 생성
-    createComment = async (nickname,comment,userId,postId) => {
-      console.log(nickname,password,title,content)
+    createComment = async ({comment,postId,userId, username}) => {
+
       const createCommentData = await Comment.create({
         content: comment,
         postId: postId,
         userId: userId,
-        username: nickname
+        username: username
     });
       return createCommentData;
     }
@@ -34,5 +33,6 @@ class CommentRepository {
       return deleteCommentData;
     }
   }
-  
+
+
   module.exports = CommentRepository;
