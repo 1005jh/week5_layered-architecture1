@@ -8,14 +8,14 @@ class LikesRepository {
     return findOneLike;
   };
   upLikePost = async ({ postId }) => {
-    const updateLikePost = await Post.update(
+    const updateLikePost = await Post.increment(
       { likes: 1 },
       { where: { postId } }
     );
     return updateLikePost;
   };
   downLikePost = async ({ postId }) => {
-    const updateLikePost = await Post.update(
+    const updateLikePost = await Post.increment(
       { likes: -1 },
       { where: { postId } }
     );
