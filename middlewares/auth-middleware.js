@@ -74,12 +74,9 @@ module.exports = async (req, res, next) => {
     }
 
     try {
-      // 1.access토큰, refresh토큰 모두 사용 불가
       if (!accessVerified && !refreshVerified) {
         throw new InvalidParamsError('로그인 기한이 만료되었습니다.');
       }
-
-      // 2.access토큰은 만료되었지만 refresh토큰이 존재한다면 accessToken 발급
       if (!accessVerified && refreshVerified) {
         const existUser = await User.findOne({
           where: { refreshToken: refreshToken },
@@ -89,8 +86,8 @@ module.exports = async (req, res, next) => {
           throw new InvalidParamsError('로그인 기한이 만료되었습니다.');
         }
 
-        // accessToken 발급
-        const userId = existUser.userId; //옵셔널 체이닝
+
+        const userId = existUser.userId; 
 
         const newAccessToken = jwt.sign({ userId }, process.env.SECRET_KEY, {
           expiresIn: '1d',
@@ -105,7 +102,7 @@ module.exports = async (req, res, next) => {
         });
       }
 
-      // 3.access토큰은 있지만, refresh토큰 사용 불가하다면 refreshToken 발급
+     
       if (accessVerified && !refreshVerified) {
         const { userId } = accessVerified;
 
@@ -113,7 +110,7 @@ module.exports = async (req, res, next) => {
         if (!existUser) {
           throw new InvalidParamsError(401, '로그인 기한이 만료되었습니다.');
         }
-        // refreshToken 발급
+   
         const newRefreshToken = jwt.sign({ userId }, process.env.SECRET_KEY, {
           expiresIn: '21d',
         });
